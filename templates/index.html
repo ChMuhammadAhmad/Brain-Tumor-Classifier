@@ -121,14 +121,17 @@
 
         </div>
 
+        {% if image_path %}
         <div class="uploaded-image">
-
             <img
                 src="{{ image_path }}"
                 alt="Uploaded MRI"
             >
-
         </div>
+        {% endif %}
+        
+</div>
+{% endif %}
 
     </div>
 
