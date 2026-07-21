@@ -17,15 +17,20 @@
 
 </head>
 
+
 <body>
 
+
 <div class="container">
+
 
     <!-- Header -->
 
     <div class="header">
 
-        <h1>🧠 Brain Tumor MRI Classifier</h1>
+        <h1>
+            🧠 Brain Tumor MRI Classifier
+        </h1>
 
         <p>
             Deep Learning Based Brain MRI Classification using CNN
@@ -33,9 +38,12 @@
 
     </div>
 
+
+
     <!-- Upload Card -->
 
     <div class="card">
+
 
         <form
             action="/"
@@ -43,16 +51,20 @@
             enctype="multipart/form-data"
         >
 
+
             <label class="upload-label">
 
                 Upload MRI Image
 
             </label>
 
+
+
             <div
                 class="upload-box"
                 id="dropArea"
             >
+
 
                 <input
                     type="file"
@@ -62,13 +74,20 @@
                     required
                 >
 
+
+
                 <div class="upload-content">
 
-                    <h3>📁 Drag & Drop MRI Image</h3>
+
+                    <h3>
+                        📁 Drag & Drop MRI Image
+                    </h3>
+
 
                     <p>
                         or click anywhere to browse
                     </p>
+
 
                     <span id="fileName">
 
@@ -76,19 +95,30 @@
 
                     </span>
 
+
                 </div>
+
 
             </div>
 
+
+
+
             <div class="preview-container">
+
 
                 <img
                     id="preview"
                     src="#"
                     alt="Preview"
+                    style="display:none;"
                 >
 
+
             </div>
+
+
+
 
             <button
                 type="submit"
@@ -99,49 +129,82 @@
 
             </button>
 
+
+
         </form>
+
 
     </div>
 
-    <!-- Prediction Card -->
+
+
+
+
+    <!-- Prediction Result -->
 
     {% if prediction %}
 
-    <div class="card">
+
+    <div class="card result-card">
+
 
         <h2>
 
-            Prediction
+            Prediction Result
 
         </h2>
 
+
+
         <div class="prediction">
+
 
             {{ prediction }}
 
+
         </div>
 
+
+
+
         {% if image_path %}
+
+
         <div class="uploaded-image">
+
+
             <img
                 src="{{ image_path }}"
                 alt="Uploaded MRI"
             >
+
+
         </div>
+
+
         {% endif %}
-        
-</div>
-{% endif %}
+
+
 
     </div>
 
+
     {% endif %}
+
+
+
+
+
+
 
     <!-- Confidence -->
 
     {% if probabilities %}
 
+
+
     <div class="card">
+
 
         <h2>
 
@@ -149,9 +212,15 @@
 
         </h2>
 
+
+
         {% for class, score in probabilities.items() %}
 
+
+
         <div class="confidence-row">
+
+
 
             <div class="label">
 
@@ -159,33 +228,57 @@
 
             </div>
 
+
+
             <div class="bar">
+
 
                 <div
                     class="fill"
                     style="width: {{ score }}%;"
                 ></div>
 
+
             </div>
+
+
+
 
             <div class="percent">
 
+
                 {{ "%.2f"|format(score) }}%
+
 
             </div>
 
+
+
         </div>
+
+
 
         {% endfor %}
 
+
+
     </div>
+
+
 
     {% endif %}
 
+
+
+
 </div>
+
+
 
 <script src="{{ url_for('static', path='script.js') }}"></script>
 
+
 </body>
+
 
 </html>
