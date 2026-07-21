@@ -1,0 +1,430 @@
+/* -------------------- */
+/* Google Font */
+/* -------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+/* -------------------- */
+/* Global */
+/* -------------------- */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins", sans-serif;
+}
+
+body{
+
+    background:linear-gradient(135deg,#dbeafe,#eff6ff);
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px;
+}
+
+
+/* -------------------- */
+/* Main Container */
+/* -------------------- */
+
+.container{
+
+    width:100%;
+    max-width:950px;
+}
+
+
+/* -------------------- */
+/* Header */
+/* -------------------- */
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:30px;
+}
+
+.header h1{
+
+    font-size:40px;
+
+    color:#0f172a;
+
+    margin-bottom:10px;
+}
+
+.header p{
+
+    color:#475569;
+
+    font-size:17px;
+}
+
+
+/* -------------------- */
+/* Cards */
+/* -------------------- */
+
+.card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+
+/* -------------------- */
+/* Upload */
+/* -------------------- */
+
+.upload-label{
+
+    display:block;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+    font-size:18px;
+}
+
+input[type=file]{
+
+    width:100%;
+
+    padding:12px;
+
+    border:2px dashed #3b82f6;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:#eff6ff;
+}
+
+
+/* -------------------- */
+/* Preview */
+/* -------------------- */
+
+.preview-container{
+
+    margin-top:25px;
+
+    text-align:center;
+}
+
+#preview{
+
+    width:300px;
+
+    max-width:100%;
+
+    border-radius:15px;
+
+    border:2px solid #e2e8f0;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+
+/* -------------------- */
+/* Button */
+/* -------------------- */
+
+button{
+
+    margin-top:25px;
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(37,99,235,.3);
+}
+
+
+/* -------------------- */
+/* Prediction */
+/* -------------------- */
+
+.prediction{
+
+    margin:20px 0;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:700;
+}
+
+
+/* -------------------- */
+/* Uploaded Image */
+/* -------------------- */
+
+.uploaded-image{
+
+    margin-top:20px;
+
+    text-align:center;
+}
+
+.uploaded-image img{
+
+    width:320px;
+
+    max-width:100%;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+
+/* -------------------- */
+/* Confidence */
+/* -------------------- */
+
+.confidence-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin:18px 0;
+}
+
+.label{
+
+    width:120px;
+
+    font-weight:600;
+}
+
+.bar{
+
+    flex:1;
+
+    height:16px;
+
+    background:#e2e8f0;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.fill{
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #38bdf8
+    );
+
+    border-radius:20px;
+
+    transition:width .8s ease;
+}
+
+.percent{
+
+    width:60px;
+
+    text-align:right;
+
+    font-weight:600;
+}
+
+
+/* -------------------- */
+/* Responsive */
+/* -------------------- */
+
+@media(max-width:700px){
+
+.header h1{
+
+    font-size:30px;
+}
+
+.card{
+
+    padding:20px;
+}
+
+.confidence-row{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+}
+
+.label{
+
+    width:auto;
+}
+
+.percent{
+
+    width:auto;
+}
+
+}
+
+.upload-box{
+
+    margin-top:20px;
+
+    border:3px dashed #3b82f6;
+
+    border-radius:18px;
+
+    padding:40px;
+
+    background:#eff6ff;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    position:relative;
+}
+
+.upload-box:hover{
+
+    background:#dbeafe;
+}
+
+.upload-box.dragover{
+
+    background:#bfdbfe;
+
+    border-color:#1d4ed8;
+
+    transform:scale(1.02);
+}
+
+.upload-box input{
+
+    position:absolute;
+
+    inset:0;
+
+    opacity:0;
+
+    cursor:pointer;
+}
+
+.upload-content h3{
+
+    color:#1e3a8a;
+
+    margin-bottom:10px;
+}
+
+.upload-content p{
+
+    color:#64748b;
+
+    margin-bottom:10px;
+}
+
+#fileName{
+
+    font-weight:600;
+
+    color:#2563eb;
+}
+
+#preview{
+
+    margin-top:25px;
+
+    display:none;
+
+    width:320px;
+
+    max-width:100%;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.fade{
+
+    animation:fade .7s;
+}
+
+@keyframes fade{
+
+    from{
+
+        opacity:0;
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Brain Tumor MRI Classifier</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>🧠 Brain Tumor MRI Classifier</h1>
+
+        <p>
+            Deep Learning Based Brain MRI Classification using CNN
+        </p>
+
+    </div>
+
+    <!-- Upload Card -->
+
+    <div class="card">
+
+        <form
+            action="/"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <label class="upload-label">
+
+                Upload MRI Image
+
+            </label>
+
+            <div
+                class="upload-box"
+                id="dropArea"
+            >
+
+                <input
+                    type="file"
+                    name="file"
+                    id="fileInput"
+                    accept="image/*"
+                    required
+                >
+
+                <div class="upload-content">
+
+                    <h3>📁 Drag & Drop MRI Image</h3>
+
+                    <p>
+                        or click anywhere to browse
+                    </p>
+
+                    <span id="fileName">
+
+                        No file selected
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="preview-container">
+
+                <img
+                    id="preview"
+                    src="#"
+                    alt="Preview"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                id="predictButton"
+            >
+
+                Predict
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- Prediction Card -->
+
+    {% if prediction %}
+
+    <div class="card">
+
+        <h2>
+
+            Prediction
+
+        </h2>
+
+        <div class="prediction">
+
+            {{ prediction }}
+
+        </div>
+
+        <div class="uploaded-image">
+
+            <img
+                src="{{ image_path }}"
+                alt="Uploaded MRI"
+            >
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- Confidence -->
+
+    {% if probabilities %}
+
+    <div class="card">
+
+        <h2>
+
+            Prediction Confidence
+
+        </h2>
+
+        {% for class, score in probabilities.items() %}
+
+        <div class="confidence-row">
+
+            <div class="label">
+
+                {{ class }}
+
+            </div>
+
+            <div class="bar">
+
+                <div
+                    class="fill"
+                    style="width: {{ score }}%;"
+                ></div>
+
+            </div>
+
+            <div class="percent">
+
+                {{ "%.2f"|format(score) }}%
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script src="{{ url_for('static', path='script.js') }}"></script>
+
+</body>
+
+</html>
