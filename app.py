@@ -12,12 +12,6 @@ app = FastAPI(title="Brain Tumor MRI Classifier")
 # Static files (CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.mount(
-    "/uploads",
-    StaticFiles(directory="uploads"),
-    name="uploads"
-)
-
 # HTML Templates
 templates = Jinja2Templates(directory="templates")
 
