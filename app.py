@@ -80,6 +80,6 @@ async def predict(
         context={
             "prediction": result["prediction"],
             "probabilities": result["probabilities"],
-            "image_path": f"/uploads/{file.filename}"
+            "image_path": None
         }
     )
