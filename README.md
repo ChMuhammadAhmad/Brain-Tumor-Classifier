@@ -1,25 +1,45 @@
 # 🧠 Brain Tumor MRI Classifier
 
-A Deep Learning web application that classifies Brain MRI images into four categories using a Convolutional Neural Network (CNN) built with PyTorch and deployed through FastAPI.
+A Deep Learning web application that classifies Brain MRI images into four categories using a custom Convolutional Neural Network (CNN) built with PyTorch and deployed using FastAPI.
 
-The application allows users to upload an MRI scan through a web interface and instantly receive the predicted tumor type along with confidence scores for all classes.
+The application allows users to upload an MRI scan through a web interface and receive the predicted tumor category along with confidence scores for all classes.
+
+> ⚠️ This project is developed for educational and demonstration purposes only. It is not intended for clinical diagnosis or medical decision-making.
+
+---
+
+# 🌐 Live Demo
+
+The application is deployed on **Render**:
+
+🔗 https://brain-tumor-classifier-czyt.onrender.com
+
+> Note: The application is hosted on Render's free tier. If the server is inactive, the first request may take approximately **30–50 seconds** to load while the instance wakes up.
+
+The demo allows users to:
+
+- Upload an MRI image
+- Run inference using the trained CNN model
+- View predicted tumor category
+- View confidence scores for all four classes
 
 ---
 
 # 🚀 Features
 
 - Brain MRI classification using a custom CNN
-- Four-class prediction
+- Four-class classification:
   - Glioma
   - Meningioma
   - Pituitary Tumor
   - No Tumor
-- Upload MRI images from the browser
-- Prediction confidence for every class
+- Image upload through web interface
+- Prediction confidence scores using Softmax
 - FastAPI backend
-- Responsive HTML/CSS frontend
+- HTML/CSS/JavaScript frontend
 - Data augmentation during training
 - Model checkpoint saving
+- Model inference pipeline
 - Evaluation using:
   - Accuracy
   - Precision
@@ -32,18 +52,18 @@ The application allows users to upload an MRI scan through a web interface and i
 # 🏗️ Project Structure
 
 ```
-Brain-Tumor-Classifier
+Brain_Tumor_Classifier
 │
-├── app.py
-├── config.py
-├── dataset.py
-├── model.py
-├── predict.py
-├── train.py
-├── utils.py
+├── app.py                  # FastAPI application
+├── config.py               # Configuration settings
+├── dataset.py              # Dataset loading and transformations
+├── model.py                # CNN architecture
+├── predict.py              # Model loading and inference
+├── train.py                # Training pipeline
+├── utils.py                # Utility functions
 │
 ├── models/
-│   └── best_model.pth
+│   └── best_model.pth      # Trained CNN weights
 │
 ├── static/
 │   ├── style.css
@@ -53,6 +73,7 @@ Brain-Tumor-Classifier
 │   └── index.html
 │
 ├── uploads/
+│
 ├── sample_images/
 │
 ├── requirements.txt
@@ -65,28 +86,34 @@ Brain-Tumor-Classifier
 
 The model consists of three convolutional blocks followed by fully connected layers.
 
-### Convolution Blocks
+## Convolution Blocks
 
-- Conv2D (3 → 64)
-- Batch Normalization
-- ReLU
-- MaxPooling
+```
+Input Image
+    ↓
+Conv2D (3 → 64)
+Batch Normalization
+ReLU
+MaxPooling
 
-↓
+    ↓
 
-- Conv2D (64 → 128)
-- Batch Normalization
-- ReLU
-- MaxPooling
+Conv2D (64 → 128)
+Batch Normalization
+ReLU
+MaxPooling
 
-↓
+    ↓
 
-- Conv2D (128 → 256)
-- Batch Normalization
-- ReLU
-- MaxPooling
+Conv2D (128 → 256)
+Batch Normalization
+ReLU
+MaxPooling
+```
 
-### Fully Connected Layers
+---
+
+## Fully Connected Layers
 
 ```
 16384
@@ -100,29 +127,49 @@ The model consists of three convolutional blocks followed by fully connected lay
 4 Output Classes
 ```
 
-Loss Function
+---
 
-- CrossEntropyLoss
+## Training Configuration
 
-Optimizer
+Loss Function:
 
-- Adam
+```
+CrossEntropyLoss
+```
+
+Optimizer:
+
+```
+Adam
+```
+
+Learning Rate:
+
+```
+0.001
+```
+
+Epochs:
+
+```
+30
+```
 
 ---
 
 # 📊 Data Preprocessing
 
-Training Transformations
+## Training Transformations
 
-- Resize (64×64)
+- Resize (64 × 64)
 - Random Horizontal Flip
 - Random Rotation
-- Random Affine
+- Random Affine Transformation
 - Normalize
 
-Testing Transformations
+## Testing Transformations
 
-- Resize (64×64)
+- Resize (64 × 64)
 - Normalize
 
 ---
@@ -132,7 +179,7 @@ Testing Transformations
 ## Training Performance
 
 | Metric | Score |
-|--------|-------|
+|---|---|
 | Accuracy | **96.66%** |
 | Precision | 0.97 |
 | Recall | 0.97 |
@@ -149,10 +196,10 @@ Testing Transformations
 
 ---
 
-## Testing Performance
+# Testing Performance
 
 | Metric | Score |
-|--------|-------|
+|---|---|
 | Accuracy | **90.38%** |
 | Precision | 0.91 |
 | Recall | 0.90 |
@@ -171,77 +218,82 @@ Testing Transformations
 
 # 📂 Dataset
 
-Brain Tumor MRI Dataset (4 Classes)
+Dataset:
 
-Classes
+Brain Tumor MRI Dataset
+
+Classes:
 
 - Glioma
 - Meningioma
 - Pituitary
 - No Tumor
 
-The dataset contains MRI scans divided into separate training and testing folders.
+The dataset contains separate training and testing image folders.
 
 ---
 
 # 🛠️ Tech Stack
 
-### Deep Learning
+## Deep Learning
 
 - PyTorch
+- TorchVision
 
-### Backend
+## Backend
 
 - FastAPI
+- Uvicorn
 
-### Frontend
+## Frontend
 
 - HTML
 - CSS
 - JavaScript
 
-### Visualization
-
-- Matplotlib
-
-### Data Processing
+## Data Processing
 
 - NumPy
 - Pandas
 
-### Evaluation
+## Visualization & Evaluation
 
+- Matplotlib
 - Scikit-learn
+
+## Deployment
+
+- Render
 
 ---
 
 # ⚙️ Installation
 
-Clone the repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/ChMuhammadAhmad/Brain-Tumor-Classifier.git
 ```
 
-Move into the project
+## Navigate to Project
 
 ```bash
 cd Brain_Tumor_Classifier
 ```
 
-Install dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application
+## Run Application
 
 ```bash
 uvicorn app:app --reload
 ```
 
-Open your browser
+Open:
 
 ```
 http://127.0.0.1:8000
@@ -251,24 +303,25 @@ http://127.0.0.1:8000
 
 # 🖼️ Application Workflow
 
-1. Upload an MRI image.
-2. The image is preprocessed.
-3. The trained CNN predicts the tumor type.
-4. Prediction probabilities are calculated using Softmax.
-5. The result is displayed through the FastAPI web interface.
+1. User uploads an MRI image.
+2. Image is resized and normalized.
+3. CNN model performs inference.
+4. Softmax converts predictions into probabilities.
+5. The predicted class and confidence scores are displayed.
 
 ---
 
 # 🔮 Future Improvements
 
-- Grad-CAM visualization
-- Transfer Learning (ResNet, EfficientNet)
-- Docker support
-- Cloud deployment
+- Grad-CAM visualization for model explainability
+- Transfer Learning using:
+  - ResNet
+  - EfficientNet
+- Docker containerization
 - CI/CD pipeline
-- User authentication
+- Cloud storage integration for uploaded images
+- Improved model accuracy using larger architectures
 - Medical report generation
-- REST API documentation
 
 ---
 
@@ -280,22 +333,29 @@ This project demonstrates practical understanding of:
 - Image Classification
 - Data Augmentation
 - Model Evaluation
+- Precision, Recall, F1 Score Analysis
+- Confusion Matrix Interpretation
+- PyTorch Model Development
 - Model Serialization
 - FastAPI Deployment
-- Frontend & Backend Integration
-- Software Project Structure
-- Git & GitHub Workflow
+- Frontend and Backend Integration
+- Production-style Project Structure
+- Git and GitHub Workflow
 
 ---
 
 # 👨‍💻 Author
 
-Ch Ahmed
+## Ch Ahmed
 
 AI/ML Engineer
 
+GitHub:
+
+https://github.com/ChMuhammadAhmad
+
 LinkedIn:
+
 https://www.linkedin.com/in/ch-ahmed-jutt
 
-GitHub:
-https://github.com/ChMuhammadAhmad
+---
