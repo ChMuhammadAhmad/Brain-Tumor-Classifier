@@ -4,7 +4,7 @@ A Deep Learning web application that classifies Brain MRI images into four categ
 
 The application allows users to upload an MRI scan through a web interface and receive the predicted tumor category along with confidence scores for all classes.
 
-> ⚠️ This project is developed for educational and demonstration purposes only. It is not intended for clinical diagnosis or medical decision-making.
+> ⚠️ This project is developed for educational and demonstration purposes only. It is not intended for clinical diagnosis or medical decision making.
 
 ---
 
