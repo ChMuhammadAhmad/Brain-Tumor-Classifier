@@ -31,10 +31,6 @@ CLASS_NAMES = [
 model = load_model()
 
 
-# ------------------------------
-# Home Page
-# ------------------------------
-
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
 
@@ -47,11 +43,6 @@ async def home(request: Request):
             "image_path": None
         }
     )
-
-
-# ------------------------------
-# Prediction Endpoint
-# ------------------------------
 
 @app.post("/", response_class=HTMLResponse)
 async def predict(
