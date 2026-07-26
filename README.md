@@ -14,44 +14,47 @@ The application is deployed on **Render**:
 
 🔗 https://brain-tumor-classifier-czyt.onrender.com
 
-> Note: The application is hosted on Render's free tier. If the server is inactive, the first request may take approximately **30–50 seconds** to load while the instance wakes up.
+> **Note:** The application is hosted on Render's free tier. If the server is inactive, the first request may take approximately **30–50 seconds** to load while the instance wakes up.
 
 The demo allows users to:
 
-- Upload an MRI image
-- Run inference using the trained CNN model
-- View predicted tumor category
-- View confidence scores for all four classes
+* Upload an MRI image
+* Run inference using the trained CNN model
+* View predicted tumor category
+* View confidence scores for all four classes
 
 ---
 
 # 🚀 Features
 
-- Brain MRI classification using a custom CNN
-- Four-class classification:
-  - Glioma
-  - Meningioma
-  - Pituitary Tumor
-  - No Tumor
-- Image upload through web interface
-- Prediction confidence scores using Softmax
-- FastAPI backend
-- HTML/CSS/JavaScript frontend
-- Data augmentation during training
-- Model checkpoint saving
-- Model inference pipeline
-- Evaluation using:
-  - Accuracy
-  - Precision
-  - Recall
-  - F1 Score
-  - Confusion Matrix
+* Brain MRI classification using a custom CNN
+* Four-class classification:
+
+  * Glioma
+  * Meningioma
+  * Pituitary Tumor
+  * No Tumor
+* Image upload through web interface
+* Prediction confidence scores using Softmax
+* FastAPI backend
+* HTML/CSS/JavaScript frontend
+* Data augmentation during training
+* Model checkpoint saving
+* Model inference pipeline
+* Docker containerization
+* Evaluation using:
+
+  * Accuracy
+  * Precision
+  * Recall
+  * F1 Score
+  * Confusion Matrix
 
 ---
 
 # 🏗️ Project Structure
 
-```
+```text
 Brain_Tumor_Classifier
 │
 ├── app.py                  # FastAPI application
@@ -76,6 +79,8 @@ Brain_Tumor_Classifier
 │
 ├── sample_images/
 │
+├── Dockerfile
+├── .dockerignore
 ├── requirements.txt
 └── README.md
 ```
@@ -88,7 +93,7 @@ The model consists of three convolutional blocks followed by fully connected lay
 
 ## Convolution Blocks
 
-```
+```text
 Input Image
     ↓
 Conv2D (3 → 64)
@@ -115,7 +120,7 @@ MaxPooling
 
 ## Fully Connected Layers
 
-```
+```text
 16384
    ↓
 128
@@ -133,25 +138,25 @@ MaxPooling
 
 Loss Function:
 
-```
+```text
 CrossEntropyLoss
 ```
 
 Optimizer:
 
-```
+```text
 Adam
 ```
 
 Learning Rate:
 
-```
+```text
 0.001
 ```
 
 Epochs:
 
-```
+```text
 30
 ```
 
@@ -161,16 +166,16 @@ Epochs:
 
 ## Training Transformations
 
-- Resize (64 × 64)
-- Random Horizontal Flip
-- Random Rotation
-- Random Affine Transformation
-- Normalize
+* Resize (64 × 64)
+* Random Horizontal Flip
+* Random Rotation
+* Random Affine Transformation
+* Normalize
 
 ## Testing Transformations
 
-- Resize (64 × 64)
-- Normalize
+* Resize (64 × 64)
+* Normalize
 
 ---
 
@@ -178,16 +183,16 @@ Epochs:
 
 ## Training Performance
 
-| Metric | Score |
-|---|---|
-| Accuracy | **96.66%** |
-| Precision | 0.97 |
-| Recall | 0.97 |
-| F1 Score | 0.97 |
+| Metric    | Score      |
+| --------- | ---------- |
+| Accuracy  | **96.66%** |
+| Precision | 0.97       |
+| Recall    | 0.97       |
+| F1 Score  | 0.97       |
 
 ### Training Confusion Matrix
 
-```
+```text
 [[1343   47    0   10]
  [  46 1323   11   20]
  [   3   35 1355    7]
@@ -198,16 +203,16 @@ Epochs:
 
 # Testing Performance
 
-| Metric | Score |
-|---|---|
-| Accuracy | **90.38%** |
-| Precision | 0.91 |
-| Recall | 0.90 |
-| F1 Score | 0.90 |
+| Metric    | Score      |
+| --------- | ---------- |
+| Accuracy  | **90.38%** |
+| Precision | 0.91       |
+| Recall    | 0.90       |
+| F1 Score  | 0.90       |
 
 ### Testing Confusion Matrix
 
-```
+```text
 [[298  60  26  16]
  [ 10 364  13  13]
  [  0  14 385   1]
@@ -224,10 +229,10 @@ Brain Tumor MRI Dataset
 
 Classes:
 
-- Glioma
-- Meningioma
-- Pituitary
-- No Tumor
+* Glioma
+* Meningioma
+* Pituitary
+* No Tumor
 
 The dataset contains separate training and testing image folders.
 
@@ -237,33 +242,34 @@ The dataset contains separate training and testing image folders.
 
 ## Deep Learning
 
-- PyTorch
-- TorchVision
+* PyTorch
+* TorchVision
 
 ## Backend
 
-- FastAPI
-- Uvicorn
+* FastAPI
+* Uvicorn
 
 ## Frontend
 
-- HTML
-- CSS
-- JavaScript
+* HTML
+* CSS
+* JavaScript
 
 ## Data Processing
 
-- NumPy
-- Pandas
+* NumPy
+* Pandas
 
 ## Visualization & Evaluation
 
-- Matplotlib
-- Scikit-learn
+* Matplotlib
+* Scikit-learn
 
 ## Deployment
 
-- Render
+* Render
+* Docker
 
 ---
 
@@ -295,8 +301,30 @@ uvicorn app:app --reload
 
 Open:
 
-```
+```text
 http://127.0.0.1:8000
+```
+
+---
+
+# 🐳 Docker
+
+## Build Docker Image
+
+```bash
+docker build -t brain-tumor-classifier .
+```
+
+## Run Docker Container
+
+```bash
+docker run -p 8000:8000 brain-tumor-classifier
+```
+
+Open:
+
+```text
+http://localhost:8000
 ```
 
 ---
@@ -313,15 +341,16 @@ http://127.0.0.1:8000
 
 # 🔮 Future Improvements
 
-- Grad-CAM visualization for model explainability
-- Transfer Learning using:
-  - ResNet
-  - EfficientNet
-- Docker containerization
-- CI/CD pipeline
-- Cloud storage integration for uploaded images
-- Improved model accuracy using larger architectures
-- Medical report generation
+* Grad-CAM visualization for model explainability
+* Transfer Learning using:
+
+  * ResNet
+  * EfficientNet
+* CI/CD pipeline
+* Kubernetes deployment
+* Cloud storage integration for uploaded images
+* Improved model accuracy using larger architectures
+* Medical report generation
 
 ---
 
@@ -329,18 +358,19 @@ http://127.0.0.1:8000
 
 This project demonstrates practical understanding of:
 
-- Convolutional Neural Networks
-- Image Classification
-- Data Augmentation
-- Model Evaluation
-- Precision, Recall, F1 Score Analysis
-- Confusion Matrix Interpretation
-- PyTorch Model Development
-- Model Serialization
-- FastAPI Deployment
-- Frontend and Backend Integration
-- Production-style Project Structure
-- Git and GitHub Workflow
+* Convolutional Neural Networks
+* Image Classification
+* Data Augmentation
+* Model Evaluation
+* Precision, Recall, F1 Score Analysis
+* Confusion Matrix Interpretation
+* PyTorch Model Development
+* Model Serialization
+* FastAPI Deployment
+* Frontend and Backend Integration
+* Docker Containerization
+* Production-style Project Structure
+* Git and GitHub Workflow
 
 ---
 
@@ -350,11 +380,11 @@ This project demonstrates practical understanding of:
 
 AI/ML Engineer
 
-GitHub:
+**GitHub**
 
 https://github.com/ChMuhammadAhmad
 
-LinkedIn:
+**LinkedIn**
 
 https://www.linkedin.com/in/ch-ahmed-jutt
 
