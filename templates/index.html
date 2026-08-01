@@ -1,284 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Brain Tumor MRI Classifier</title>
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', path='style.css') }}"
-    >
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI-powered Brain Tumor MRI Classifier — classifies MRI scans into Glioma, Meningioma, Pituitary Tumor or No Tumor using a Convolutional Neural Network." />
+  <title>Brain Tumor MRI Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}" />
 </head>
-
-
 <body>
 
+  {# ------------------------------------------------- #}
+  {#  Jinja helpers — robust to dict OR list probs      #}
+  {# ------------------------------------------------- #}
+  {% set class_order = ['glioma', 'meningioma', 'notumor', 'pituitary'] %}
+  {% set pretty = {
+      'glioma': 'Glioma',
+      'meningioma': 'Meningioma',
+      'notumor': 'No Tumor',
+      'pituitary': 'Pituitary Tumor'
+  } %}
 
-<div class="container">
+  {% if prediction %}
+    {% set pred_key = prediction | lower | replace(' ', '') | replace('_', '') | replace('-', '') %}
+    {% set pred_label = pretty.get(pred_key, prediction) %}
 
+    {% if probabilities is mapping %}
+      {% set confidence_raw = probabilities.values() | list | max %}
+    {% else %}
+      {% set confidence_raw = probabilities | max %}
+    {% endif %}
+    {% set confidence = (confidence_raw * 100 if confidence_raw <= 1 else confidence_raw) | round(1) %}
 
-    <!-- Header -->
+    {% if pred_key == 'notumor' %}
+      {% set badge_class = 'badge--success' %}
+      {% set badge_text = 'No Tumor Detected' %}
+      {% set icon_class = 'icon--success' %}
+    {% elif pred_key == 'glioma' %}
+      {% set badge_class = 'badge--danger' %}
+      {% set badge_text = 'Malignant-type — Specialist Review Advised' %}
+      {% set icon_class = 'icon--danger' %}
+    {% else %}
+      {% set badge_class = 'badge--warning' %}
+      {% set badge_text = 'Benign-type — Clinical Correlation Advised' %}
+      {% set icon_class = 'icon--warning' %}
+    {% endif %}
+  {% endif %}
 
-    <div class="header">
+  <!-- ======================= HERO ======================= -->
+  <header class="hero" id="top">
+    <div class="hero__glow hero__glow--1" aria-hidden="true"></div>
+    <div class="hero__glow hero__glow--2" aria-hidden="true"></div>
 
-        <h1>
-            🧠 Brain Tumor MRI Classifier
-        </h1>
-
-        <p>
-            Deep Learning Based Brain MRI Classification using CNN
+    <div class="hero__inner">
+      <div class="hero__text">
+        <span class="hero__pill">
+          <span class="hero__pill-dot" aria-hidden="true"></span>
+          AI-Powered Medical Imaging
+        </span>
+        <h1 class="hero__title">Brain Tumor <span class="gradient-text">MRI Classifier</span></h1>
+        <p class="hero__subtitle">
+          A deep learning model that analyzes brain MRI scans and classifies them into
+          four categories — <strong>Glioma</strong>, <strong>Meningioma</strong>,
+          <strong>Pituitary Tumor</strong> and <strong>No Tumor</strong> —
+          with real-time inference and probability breakdowns.
         </p>
+        <a class="hero__cta" href="#upload">
+          Upload an MRI Scan
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <ul class="hero__stats" aria-label="Model highlights">
+          <li><strong>4</strong><span>Tumor Classes</span></li>
+          <li><strong>CNN</strong><span>Architecture</span></li>
+          <li><strong>Real-time</strong><span>Inference</span></li>
+        </ul>
+      </div>
 
+      <div class="hero__art" aria-hidden="true">
+        <div class="hero__art-orbit hero__art-orbit--1"></div>
+        <div class="hero__art-orbit hero__art-orbit--2"></div>
+        <svg class="hero__brain" viewBox="0 0 220 200" role="img" aria-label="Stylized brain illustration">
+          <defs>
+            <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8"/>
+              <stop offset="55%" stop-color="#2563EB"/>
+              <stop offset="100%" stop-color="#1E3A8A"/>
+            </linearGradient>
+            <linearGradient id="scanGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#38BDF8" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#38BDF8" stop-opacity=".8"/>
+              <stop offset="100%" stop-color="#38BDF8" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <g class="brain-body">
+            <path fill="url(#brainGrad)" opacity="0.92" d="M110 20c-14 0-25 6-31 16-4-2-9-3-14-3-17 0-30 12-30 29 0 4 1 8 2 12-8 6-13 15-13 26 0 14 9 26 22 30 3 16 17 28 34 28 8 0 15-2 21-7 5 3 11 5 18 5 16 0 29-11 33-26 15-3 26-16 26-32 0-9-4-17-9-23 1-3 2-7 2-11 0-18-14-32-32-32-5 0-9 1-13 3-5-9-14-15-16-15z"/>
+            <path class="brain-line" d="M110 20v138" stroke="#0F172A" stroke-width="3" fill="none" opacity=".35"/>
+            <path class="brain-line" d="M70 55c14 4 26 14 32 28M150 52c-13 6-23 16-28 31M62 108c16-2 32 3 43 14M158 106c-15-1-30 5-41 16" stroke="#0F172A" stroke-width="3" fill="none" opacity=".3" stroke-linecap="round"/>
+          </g>
+          <rect class="brain-scanline" x="30" y="0" width="160" height="8" rx="4" fill="url(#scanGrad)"/>
+          <circle class="brain-node" cx="88" cy="82" r="5" fill="#FACC15"/>
+          <circle class="brain-node brain-node--2" cx="140" cy="118" r="4" fill="#38BDF8"/>
+        </svg>
+      </div>
     </div>
+  </header>
 
+  <main>
+    <!-- ======================= UPLOAD ======================= -->
+    <section class="section upload-section" id="upload" aria-labelledby="upload-title">
+      <h2 class="section__title" id="upload-title">Analyze an MRI Scan</h2>
+      <p class="section__subtitle">Upload a brain MRI image (JPG, JPEG or PNG). The scan is processed by a Convolutional Neural Network and classified in real time.</p>
 
+      <div class="upload-card glass-card">
+        <!-- NOTE: autocomplete="off" prevents browsers from restoring the file input on back-nav -->
+        <form id="uploadForm" method="post" action="/" enctype="multipart/form-data" autocomplete="off">
+          <div class="drop-zone" id="dropZone" role="button" tabindex="0"
+               aria-label="Upload MRI image. Press Enter to browse files, or drag and drop an image here.">
+            <!-- 'required' removed: we validate manually so we can show friendlier errors -->
+            <input type="file" id="fileInput" name="file"
+                   accept=".jpg,.jpeg,.png,image/jpeg,image/png" hidden />
 
-    <!-- Upload Card -->
+            <svg class="drop-zone__icon" viewBox="0 0 64 64" aria-hidden="true">
+              <defs>
+                <linearGradient id="upGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#2563EB"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="48" height="48" rx="12" fill="none" stroke="url(#upGrad)" stroke-width="2.5" stroke-dasharray="6 5"/>
+              <path d="M32 40V22m0 0l-8 8m8-8l8 8" stroke="url(#upGrad)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20 44h24" stroke="url(#upGrad)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
 
-    <div class="card">
+            <p class="drop-zone__title">Drag &amp; drop your MRI scan here</p>
+            <p class="drop-zone__or">— or —</p>
+            <button type="button" class="btn btn--ghost" id="browseBtn">Browse File</button>
+            <p class="drop-zone__hint">Supported formats: JPG · JPEG · PNG &nbsp;|&nbsp; Max 10 MB</p>
+          </div>
 
-
-        <form
-            action="/"
-            method="POST"
-            enctype="multipart/form-data"
-        >
-
-
-            <label class="upload-label">
-
-                Upload MRI Image
-
-            </label>
-
-
-
-            <div
-                class="upload-box"
-                id="dropArea"
-            >
-
-
-                <input
-                    type="file"
-                    name="file"
-                    id="fileInput"
-                    accept="image/*"
-                    required
-                >
-
-
-
-                <div class="upload-content">
-
-
-                    <h3>
-                        📁 Drag & Drop MRI Image
-                    </h3>
-
-
-                    <p>
-                        or click anywhere to browse
-                    </p>
-
-
-                    <span id="fileName">
-
-                        No file selected
-
-                    </span>
-
-
-                </div>
-
-
+          <!--
+            FIX: is-hidden helper class AND hidden attribute both applied.
+            The block only becomes visible once JS removes both after a valid file is chosen.
+          -->
+          <div class="file-preview is-hidden" id="filePreview" hidden>
+            <div class="file-preview__thumb-wrap">
+              <!-- No src attribute at all until JS sets one. CSS also hides broken <img>. -->
+              <img id="previewImage" class="file-preview__thumb" alt="" />
+              <span class="file-preview__scan" aria-hidden="true"></span>
             </div>
-
-
-
-
-            <div class="preview-container">
-
-
-                <img
-                    id="preview"
-                    src="#"
-                    alt="Preview"
-                    style="display:none;"
-                >
-
-
+            <div class="file-preview__meta">
+              <p class="file-preview__label">Selected file</p>
+              <p class="file-preview__name" id="fileName">—</p>
+              <p class="file-preview__size" id="fileSize"></p>
+              <div class="upload-progress" id="uploadProgress" aria-hidden="true">
+                <div class="upload-progress__bar"></div>
+              </div>
+              <button type="button" class="file-preview__remove" id="removeFile">✕ Remove</button>
             </div>
+          </div>
 
+          <p class="form-error" id="formError" role="alert" hidden></p>
 
-
-
-            <button
-                type="submit"
-                id="predictButton"
-            >
-
-                Predict
-
-            </button>
-
-
-
+          <button type="submit" class="btn btn--primary btn--analyze" id="analyzeBtn" disabled aria-disabled="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9.75 3.5c-2.9 0-5.25 2.35-5.25 5.25 0 1.2.4 2.31 1.08 3.2A5.25 5.25 0 0 0 6.5 21.9c.34.07.7.1 1.06.1h8.88c2.9 0 5.25-2.35 5.25-5.25 0-1.2-.4-2.31-1.08-3.2A5.25 5.25 0 0 0 14.25 3.5h-4.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M12 3.5V22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            Analyze MRI
+          </button>
         </form>
+      </div>
+    </section>
 
-
+    <!-- ======================= LOADING OVERLAY ======================= -->
+    <!-- FIX: is-hidden helper class + hidden attribute so it never flashes on load -->
+    <div class="loading-overlay is-hidden" id="loadingOverlay" hidden role="status" aria-live="polite" aria-label="Analyzing MRI scan">
+      <div class="loading-card glass-card">
+        <div class="loading-brain-wrap">
+          <svg class="loading-brain" viewBox="0 0 220 200" aria-hidden="true">
+            <path fill="none" stroke="#2563EB" stroke-width="4" opacity=".9" d="M110 20c-14 0-25 6-31 16-4-2-9-3-14-3-17 0-30 12-30 29 0 4 1 8 2 12-8 6-13 15-13 26 0 14 9 26 22 30 3 16 17 28 34 28 8 0 15-2 21-7 5 3 11 5 18 5 16 0 29-11 33-26 15-3 26-16 26-32 0-9-4-17-9-23 1-3 2-7 2-11 0-18-14-32-32-32-5 0-9 1-13 3-5-9-14-15-16-15z"/>
+            <path fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity=".8" d="M70 55c14 4 26 14 32 28M150 52c-13 6-23 16-28 31M62 108c16-2 32 3 43 14M158 106c-15-1-30 5-41 16"/>
+            <line class="loading-scanline" x1="35" y1="20" x2="185" y2="20" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div class="loading-ring" aria-hidden="true"></div>
+        </div>
+        <p class="loading-message" id="loadingMessage">Analyzing MRI…</p>
+        <div class="loading-progress">
+          <div class="loading-progress__bar" id="loadingProgressBar"></div>
+        </div>
+        <p class="loading-percent" id="loadingPercent">0%</p>
+      </div>
     </div>
 
-
-
-
-
-    <!-- Prediction Result -->
-
+    <!-- ======================= RESULTS ======================= -->
     {% if prediction %}
+    <section class="section results-section" id="results" aria-labelledby="results-title" data-has-result="true">
+      <h2 class="section__title" id="results-title">Prediction Result</h2>
 
+      <div class="results-grid">
+        <article class="result-card glass-card fade-in-up">
+          <div class="result-card__head">
+            <div class="result-icon {{ icon_class }}" aria-hidden="true">
+              {% if pred_key == 'notumor' %}
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15 24.5l6 6 12-13" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {% elif pred_key == 'glioma' %}
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 14v12" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="33" r="2.4" fill="currentColor"/></svg>
+              {% else %}
+              <svg viewBox="0 0 48 48"><path d="M24 7l19 33H5z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M24 20v9" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="34" r="2.2" fill="currentColor"/></svg>
+              {% endif %}
+            </div>
+            <div>
+              <p class="result-card__eyebrow">Predicted Class</p>
+              <h3 class="result-card__title">{{ pred_label }}</h3>
+            </div>
+          </div>
 
-    <div class="card result-card">
+          <div class="result-card__confidence">
+            <span class="result-card__confidence-value" id="confidenceValue" data-percent="{{ confidence }}">0%</span>
+            <span class="result-card__confidence-label">Model Confidence</span>
+          </div>
 
+          <span class="badge {{ badge_class }}">{{ badge_text }}</span>
 
-        <h2>
+          <figure class="mri-preview" id="mriPreviewCard">
+            <img id="resultMriImage"
+                 {% if image_path %}src="{{ image_path }}"{% endif %}
+                 alt="Uploaded brain MRI scan used for prediction" />
+            <figcaption>Uploaded MRI scan — hover to zoom</figcaption>
+          </figure>
+        </article>
 
-            Prediction Result
+        <article class="probs-card glass-card fade-in-up" aria-labelledby="probs-title">
+          <h3 class="probs-card__title" id="probs-title">Class Probabilities</h3>
+          <p class="probs-card__subtitle">Distribution of the model's confidence across all four tumor categories.</p>
 
-        </h2>
-
-
-
-        <div class="prediction">
-
-
-            {{ prediction }}
-
-
-        </div>
-
-
-
-
-        {% if image_path %}
-
-
-        <div class="uploaded-image">
-
-
-            <img
-                src="{{ image_path }}"
-                alt="Uploaded MRI"
-            >
-
-
-        </div>
-
-
-        {% endif %}
-
-
-
-    </div>
-
-
+          <div class="prob-list">
+            {% for cls in class_order %}
+              {% if probabilities is mapping %}
+                {% set raw = probabilities.get(cls, probabilities.get(cls | capitalize, 0)) %}
+              {% else %}
+                {% set raw = probabilities[loop.index0] if loop.index0 < (probabilities | length) else 0 %}
+              {% endif %}
+              {% set pct = (raw * 100 if raw <= 1 else raw) | round(1) %}
+            <div class="prob-row prob--{{ cls }} {% if cls == pred_key %}prob--active{% endif %}">
+              <div class="prob-row__label">
+                <span>{{ pretty.get(cls) }}</span>
+                <span class="prob-row__value" data-percent="{{ pct }}">{{ pct }}%</span>
+              </div>
+              <div class="prob-track" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100"
+                   aria-label="{{ pretty.get(cls) }} probability {{ pct }} percent">
+                <div class="prob-fill" data-percent="{{ pct }}"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </article>
+      </div>
+    </section>
     {% endif %}
 
+    <!-- ======================= INFO CARDS ======================= -->
+    <section class="section info-section" aria-labelledby="info-title">
+      <h2 class="section__title" id="info-title">Understanding the Four Classes</h2>
+      <p class="section__subtitle">A brief overview of each tumor category the model can detect.</p>
 
+      <div class="info-grid">
+        <article class="info-card info-card--glioma glass-card">
+          <div class="info-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="20" r="6" fill="currentColor" opacity=".7"/><path d="M20 5v6M20 29v6M5 20h6M29 20h6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Glioma</h3>
+          <p>A tumor arising from glial cells in the brain or spine. Gliomas are typically aggressive, malignant-like growths that require prompt specialist evaluation.</p>
+        </article>
 
+        <article class="info-card info-card--meningioma glass-card">
+          <div class="info-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40"><path d="M20 4c8 0 14 6 14 14s-6 14-14 14S6 26 6 18 12 4 20 4z" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M20 11c5 0 8 3 8 7s-3 7-8 7-8-3-8-7 3-7 8-7z" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/></svg>
+          </div>
+          <h3>Meningioma</h3>
+          <p>A usually benign, slow-growing tumor that forms in the meninges — the protective membranes surrounding the brain and spinal cord.</p>
+        </article>
 
+        <article class="info-card info-card--pituitary glass-card">
+          <div class="info-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M20 25v9m-6-4l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Pituitary Tumor</h3>
+          <p>An abnormal growth in the pituitary gland at the base of the brain. Most are benign adenomas, but they can affect hormone balance and vision.</p>
+        </article>
 
+        <article class="info-card info-card--notumor glass-card">
+          <div class="info-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40"><path d="M20 4l12 5v9c0 8-5 14-12 18C13 32 8 26 8 18V9z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M14.5 20l4 4 7-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>No Tumor</h3>
+          <p>The scan shows no visible tumor mass. Healthy brain tissue with no abnormal growth detected by the model in this MRI image.</p>
+        </article>
+      </div>
+    </section>
 
+    <!-- ======================= MODEL INFO ======================= -->
+    <section class="section model-section" aria-labelledby="model-title">
+      <h2 class="section__title" id="model-title">Model Information</h2>
 
-    <!-- Confidence -->
+      <div class="model-card glass-card">
+        <dl class="model-grid">
+          <div class="model-item"><dt>Model Type</dt><dd>Convolutional Neural Network (CNN)</dd></div>
+          <div class="model-item"><dt>Input Size</dt><dd>64 × 64 RGB MRI</dd></div>
+          <div class="model-item"><dt>Classes</dt><dd>4</dd></div>
+          <div class="model-item"><dt>Framework</dt><dd>PyTorch</dd></div>
+          <div class="model-item"><dt>Backend</dt><dd>FastAPI</dd></div>
+          <div class="model-item"><dt>Inference</dt><dd><span class="live-dot" aria-hidden="true"></span> Real-time</dd></div>
+        </dl>
+      </div>
 
-    {% if probabilities %}
+      <p class="disclaimer">
+        ⚠️ This tool is an educational AI demonstration and does not constitute medical advice.
+        Always consult a qualified radiologist or physician for diagnosis.
+      </p>
+    </section>
+  </main>
 
+  <footer class="footer">
+    <p class="footer__title">Brain Tumor MRI Classifier</p>
+    <p class="footer__built">Built with <span>FastAPI</span> · <span>PyTorch</span> · <span>Deep Learning</span></p>
+    <p class="footer__copy">© 2026 Brain Tumor MRI Classifier. All rights reserved.</p>
+  </footer>
 
-
-    <div class="card">
-
-
-        <h2>
-
-            Prediction Confidence
-
-        </h2>
-
-
-
-        {% for class, score in probabilities.items() %}
-
-
-
-        <div class="confidence-row">
-
-
-
-            <div class="label">
-
-                {{ class }}
-
-            </div>
-
-
-
-            <div class="bar">
-
-
-                <div
-                    class="fill"
-                    style="width: {{ score }}%;"
-                ></div>
-
-
-            </div>
-
-
-
-
-            <div class="percent">
-
-
-                {{ "%.2f"|format(score) }}%
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-        {% endfor %}
-
-
-
-    </div>
-
-
-
-    {% endif %}
-
-
-
-
-</div>
-
-
-
-<script src="{{ url_for('static', path='script.js') }}"></script>
-
-
+  <script src="{{ url_for('static', path='/js/script.js') }}"></script>
 </body>
-
-
 </html>

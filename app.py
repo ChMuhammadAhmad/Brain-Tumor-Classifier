@@ -9,17 +9,14 @@ from predict import load_model, predict_image
 
 app = FastAPI(title="Brain Tumor MRI Classifier")
 
-# Static files (CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-# HTML Templates
 templates = Jinja2Templates(directory="templates")
 
-# Upload folder
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-# Class Names
 CLASS_NAMES = [
     "glioma",
     "meningioma",
@@ -27,7 +24,6 @@ CLASS_NAMES = [
     "pituitary"
 ]
 
-# Load Model Once
 model = load_model()
 
 
@@ -50,14 +46,10 @@ async def predict(
     file: UploadFile = File(...)
 ):
 
-    # Save uploaded image
-
     file_path = UPLOAD_DIR / file.filename
 
     with open(file_path, "wb") as f:
         f.write(await file.read())
-
-    # Predict
 
     result = predict_image(
         model,
@@ -71,6 +63,6 @@ async def predict(
         context={
             "prediction": result["prediction"],
             "probabilities": result["probabilities"],
-            "image_path": None
+            "image_path": f"/uploads/{file.filename}"
         }
     )
