@@ -157,7 +157,7 @@ Learning Rate:
 Epochs:
 
 ```text
-30
+100
 ```
 
 ---
@@ -166,7 +166,7 @@ Epochs:
 
 ## Training Transformations
 
-* Resize (64 × 64)
+* Resize (256 × 256)
 * Random Horizontal Flip
 * Random Rotation
 * Random Affine Transformation
@@ -174,7 +174,7 @@ Epochs:
 
 ## Testing Transformations
 
-* Resize (64 × 64)
+* Resize (256 × 256)
 * Normalize
 
 ---
@@ -205,7 +205,7 @@ Epochs:
 
 | Metric    | Score      |
 | --------- | ---------- |
-| Accuracy  | **90.38%** |
+| Accuracy  | **91.88%** |
 | Precision | 0.91       |
 | Recall    | 0.90       |
 | F1 Score  | 0.90       |
