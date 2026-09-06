@@ -12,7 +12,7 @@ The application allows users to upload an MRI scan through a web interface and r
 
 The application is deployed on **Render**:
 
-🔗 https://brain-tumor-classifier-czyt.onrender.com
+🔗 https://brain-tumor-classifier-1vtx.onrender.com
 
 > **Note:** The application is hosted on Render's free tier. If the server is inactive, the first request may take approximately **30–50 seconds** to load while the instance wakes up.
 
