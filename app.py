@@ -10,12 +10,13 @@ from predict import load_model, predict_image
 app = FastAPI(title="Brain Tumor MRI Classifier")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-
-templates = Jinja2Templates(directory="templates")
 
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
+templates = Jinja2Templates(directory="templates")
 
 CLASS_NAMES = [
     "glioma",
