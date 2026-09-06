@@ -1,13 +1,15 @@
 from pathlib import Path
-
-from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-
 from predict import load_model, predict_image
+from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request, UploadFile, File
 
 app = FastAPI(title="Brain Tumor MRI Classifier")
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
