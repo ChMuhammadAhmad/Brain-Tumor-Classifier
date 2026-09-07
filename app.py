@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from predict import load_model, predict_image
 from fastapi.templating import Jinja2Templates
-from fastapi import FastAPI, Request, UploadFile, File
+from fastapi import FastAPI, Request, UploadFile, File, Response
 
 app = FastAPI(title="Brain Tumor MRI Classifier")
 
@@ -12,8 +12,8 @@ async def health_get():
     return {"status": "ok"}
 
 @app.head("/health")
-async def health():
-    return {"status": "ok"}
+async def health_head():
+    return Response(status_code = 200)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
