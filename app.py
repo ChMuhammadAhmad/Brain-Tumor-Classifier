@@ -7,6 +7,10 @@ from fastapi import FastAPI, Request, UploadFile, File
 
 app = FastAPI(title="Brain Tumor MRI Classifier")
 
+@app.get("/health")
+async def health_get():
+    return {"status": "ok"}
+
 @app.head("/health")
 async def health():
     return {"status": "ok"}
